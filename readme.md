@@ -12,6 +12,8 @@ ngRemoveValidate makes it easy for you to validate form fields agents data from 
 
 - Allows HTTP method definition (default POST) with `ng-remote-method="GET"`
 
+- Send one or more other form values to include in validation with `ng-remote-reference="input_name"`
+
 ##Getting started - Example##
 
 **Adding ngRemoteValidate to your project**
@@ -86,9 +88,10 @@ This will be a basic change password form that requires the user to enter their 
 ##Options##
 There are a few defaults that can be overwritten with options. They are:
 
-- `ng-remote-validate` takes a string or an Array of string i.e. `ng-remote-validate="/url/one"` or `ng-remote-validate="[ '/url/one', '/url/two' ]"`
+- `ng-remote-validate` takes a string or an Array of strings i.e. `ng-remote-validate="/url/one"` or `ng-remote-validate="[ '/url/one', '/url/two' ]"`
 - `ng-remote-throttle` (default: 400) Users inactivity length before sending validation requests to the server
 - `ng-remote-method` (default: 'POST') Type of request you would like to send
+- `ng-remote-reference` takes a string or an Array of strings i.e. `ng-remote-reference="input_name"` or `ng-remote-reference="[ 'input_name', 'other_input_name' ]"`
 
 **Example using all**
 ```html
@@ -99,6 +102,7 @@ There are a few defaults that can be overwritten with options. They are:
        ng-remote-validate="/customer/validpassword"
        ng-remote-throttle="550"
        ng-remote-method="GET"
+       ng-remote-reference="username"
        required>
 
 <input type="text" 
@@ -108,6 +112,7 @@ There are a few defaults that can be overwritten with options. They are:
        ng-remote-validate="[ '/customer/email-registered', '/customer/email-restricted' ]"
        ng-remote-throttle="800"
        ng-remote-method="POST"
+       ng-remote-reference="[ 'email_verify', 'username' ]"
        required>
 ```
 
@@ -123,6 +128,23 @@ input.ng-processing {
 
 ```html
 <span class="message" ng-show="formName.inputName.$processing">validating...</span>
+```
+
+##Data sent to server##
+```javascript
+{
+    value_to_validate: '', //Is the value to be validated on the server
+}
+```
+
+If you used ng-remote-reference, those values are sent with the element's name as the key, for example:
+
+```javascript
+{
+    value_to_validate: '', //Is the value to be validated on the server
+    input_name: '', //Value of input_name
+    other_input_name: '' //Value of other_input_name
+}
 ```
 
 ##Expected server response##
